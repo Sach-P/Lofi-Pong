@@ -20,7 +20,7 @@ pygame.itit()
 screen = pygame.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
 running = True
-While running:
+while running:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			running = False
