@@ -2,9 +2,9 @@ import pygame
 import random
 
 from pygame.locals import (
-	K_A,
-	K_S,
-	K_D,
+	K_a,
+	K_s,
+	K_d,
 	K_ESCAPE,
 	QUIT,
 	KEYDOWN,
@@ -15,9 +15,9 @@ SCREEN_WIDTH = 800
 
 #FIXME: add a player and enemy class
 
-pygame.itit()
+pygame.init()
 
-screen = pygame.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
 running = True
 while running:
@@ -28,7 +28,7 @@ while running:
 			if event.key == K_ESCAPE:
 				running = False
 
-	screen.fill(0, 0, 0)
+	screen.fill((0, 0, 0))
 
 	pygame.display.flip()
 
