@@ -18,3 +18,14 @@ SCREEN_WIDTH = 800
 pygame.itit()
 
 screen = pygame.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+
+running = True
+While running:
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			running = False
+		elif event.type == KEYDOWN:
+			if event.key == K_ESCAPE:
+				running = False
+
+pygame.quit()
