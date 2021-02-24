@@ -28,4 +28,8 @@ While running:
 			if event.key == K_ESCAPE:
 				running = False
 
+	screen.fill(0, 0, 0)
+
+	pygame.display.flip()
+
 pygame.quit()
