@@ -13,7 +13,11 @@ from pygame.locals import (
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 800
 colorChangeBlue = 5
-colorIncrementBlue = 5
+colorIncrementBlue = 2
+colorChangeGreen = 5
+colorIncrementGreen = 0
+colorChangeRed = 5
+colorIncrementRed = 0
 
 #FIXME: add a player and enemy class
 
@@ -32,16 +36,37 @@ while running:
 			if event.key == K_ESCAPE:
 				running = False
 
-	screen.fill((0, 0, colorChangeBlue))
+	screen.fill((colorChangeRed, colorChangeGreen, colorChangeBlue))
 
-	if colorChangeBlue < 255 and colorChangeBlue >= 5:
+	if colorChangeBlue < 220 and colorChangeBlue >= 5:
 		colorChangeBlue += colorIncrementBlue
 	elif colorChangeBlue < 5:
-		colorIncrementBlue = 5
-		colorChangeBlue += colorIncrementBlue
+		colorIncrementBlue = 0
+		colorChangeBlue = 5
 	else:
-		colorIncrementBlue = -5
+		colorIncrementBlue = -2
 		colorChangeBlue += colorIncrementBlue
+		colorIncrementGreen = 2
+
+	if colorChangeGreen < 220 and colorChangeGreen >= 5:
+		colorChangeGreen += colorIncrementGreen
+	elif colorChangeGreen < 5:
+		colorIncrementGreen = 0
+		colorChangeGreen = 5
+	else:
+		colorIncrementGreen = -2
+		colorChangeGreen += colorIncrementGreen
+		colorIncrementRed = 2
+
+	if colorChangeRed < 220 and colorChangeRed >= 5:
+		colorChangeRed += colorIncrementRed
+	elif colorChangeRed < 5:
+		colorIncrementRed = 0
+		colorChangeRed = 5
+	else:
+		colorIncrementRed = -2
+		colorChangeRed += colorIncrementRed
+		colorIncrementBlue = 2
 
 	pygame.display.flip()
 
