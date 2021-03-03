@@ -12,7 +12,7 @@ from pygame.locals import (
 
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 800
-colorChangeBlue = 5
+colorChangeBlue = 220
 colorIncrementBlue = 2
 colorChangeGreen = 5
 colorIncrementGreen = 0
@@ -48,7 +48,7 @@ while running:
 		colorChangeBlue += colorIncrementBlue
 		colorIncrementGreen = 2
 
-	if colorChangeGreen < 220 and colorChangeGreen >= 5:
+	if colorChangeGreen < 200 and colorChangeGreen >= 5:
 		colorChangeGreen += colorIncrementGreen
 	elif colorChangeGreen < 5:
 		colorIncrementGreen = 0
