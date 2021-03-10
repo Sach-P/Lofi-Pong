@@ -83,7 +83,7 @@ class Ball(pygame.sprite.Sprite):
                 self.dy = -1
 
 
-        self.rect.move_ip(self.dx, self.dy)   
+        self.rect.move_ip(self.dx * 10, self.dy * 10)   
 
 pygame.init()
 
@@ -167,6 +167,6 @@ while running:
 
     pygame.display.flip()
 
-    clock.tick(60)
+    clock.tick(30)
 
 pygame.quit()
