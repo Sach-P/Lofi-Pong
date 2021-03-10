@@ -38,7 +38,7 @@ class Ball(pygame.sprite.Sprite):
         super(Ball, self).__init__()
         self.surf = pygame.Surface((20, 20))
         self.surf.fill((255, 255, 255))
-        self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, 0))
+        self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, 100))
         self.bY = SCREEN_HEIGHT - 100
         self.tY = 100
 
@@ -68,22 +68,21 @@ class Ball(pygame.sprite.Sprite):
         if centerY <= self.tY:
             self.toY = self.bY
             if (self.toX - centerX != 0):
-                self.dx = (self.toX - centerX)/math.sqrt((self.toX - centerX)*(self.toX - centerX) + (self.toY - centerY)*(self.toY - centerY))
+                self.dx = (self.toX - centerX)/abs(self.toY - centerY)
             if (self.toY - centerY != 0):
                 self.dy = 1
-    
-
         
-
-        if centerY >= self.bY:
+        elif centerY >= self.bY:
             self.toY = self.tY
             if (self.toX - centerX != 0):
-                self.dx = (self.toX - centerX)/math.sqrt(self.toX**2 + centerX**2)
+                self.dx = (self.toX - centerX)/abs(self.toY - centerY)
             if (self.toY - centerY != 0):
                 self.dy = -1
 
 
-        self.rect.move_ip(self.dx, self.dy)   
+
+
+        self.rect.move_ip(self.dx * 10, self.dy * 10)   
 
 pygame.init()
 
@@ -104,8 +103,11 @@ entities.add(ball)
 
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
+clock = pygame.time.Clock()
+
 running = True
 while running:
+    clock.tick(60)
     for event in pygame.event.get():
 
         if event.type == KEYDOWN and event.key == K_ESCAPE:
