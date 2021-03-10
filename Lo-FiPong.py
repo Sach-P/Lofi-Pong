@@ -1,17 +1,95 @@
 import pygame
 import random
+import math
 
-from pygame.locals import (
-	K_a,
-	K_s,
-	K_d,
-	K_ESCAPE,
-	QUIT,
-	KEYDOWN,
+from pygame.locals import(
+    K_a,
+    K_s,
+    K_d,
+    K_ESCAPE,
+    KEYDOWN,
+    QUIT,
 )
 
-SCREEN_HEIGHT = 600
-SCREEN_WIDTH = 800
+class Table(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Table, self).__init__()
+        self.surf = pygame.Surface((400, 600))
+        self.surf.fill((100, 150, 150))
+        self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Player, self).__init__()
+        self.surf = pygame.Surface((75, 35))
+        self.surf.fill((255, 230, 255))
+        self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
+
+    def update(self, pressed_keys):
+        if pressed_keys[K_a]:
+            self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2 - 200, SCREEN_HEIGHT - 50))
+        if pressed_keys[K_s]:
+            self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
+        if pressed_keys[K_d]:
+            self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2 + 200, SCREEN_HEIGHT - 50))
+
+class Ball(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Ball, self).__init__()
+        self.surf = pygame.Surface((20, 20))
+        self.surf.fill((255, 255, 255))
+        self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, 0))
+        self.bY = SCREEN_HEIGHT - 100
+        self.tY = 100
+
+        self.Lx = SCREEN_WIDTH / 2 - 200
+        self.Mx = SCREEN_WIDTH / 2
+        self.Rx = SCREEN_WIDTH / 2 + 200
+
+        self.toY = 0
+        self.toX = 0
+        self.dx = 0
+        self.dy = 0
+      
+
+    def update(self):
+
+        centerX, centerY = self.rect.center
+
+        r = random.randint(1, 3)
+
+        if r == 1:
+            self.toX = self.Lx
+        elif r == 2:
+            self.toX = self.Mx
+        elif r == 3:
+            self.toX = self.Rx
+
+        if centerY <= self.tY:
+            self.toY = self.bY
+            if (self.toX - centerX != 0):
+                self.dx = (self.toX - centerX)/math.sqrt((self.toX - centerX)*(self.toX - centerX) + (self.toY - centerY)*(self.toY - centerY))
+            if (self.toY - centerY != 0):
+                self.dy = 1
+    
+
+        
+
+        if centerY >= self.bY:
+            self.toY = self.tY
+            if (self.toX - centerX != 0):
+                self.dx = (self.toX - centerX)/math.sqrt(self.toX**2 + centerX**2)
+            if (self.toY - centerY != 0):
+                self.dy = -1
+
+
+        self.rect.move_ip(self.dx, self.dy)   
+
+pygame.init()
+
+SCREEN_WIDTH = 600
+SCREEN_HEIGHT = 800
+
 colorChangeBlue = 220
 colorIncrementBlue = 2
 colorChangeGreen = 5
@@ -20,63 +98,75 @@ colorChangeRed = 5
 colorIncrementRed = 0
 t = 0
 
-#FIXME: add a player and enemy class
 
-pygame.init()
+entities = pygame.sprite.Group()
 
-clock = pygame.time.Clock()
+table = Table()
+entities.add(table)
+player = Player()
+entities.add(player)
+ball = Ball()
+entities.add(ball)
+
+
 
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
+clock = pygame.time.Clock()
+
 running = True
 while running:
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			running = False
-		elif event.type == KEYDOWN:
-			if event.key == K_ESCAPE:
-				running = False
+    for event in pygame.event.get():
 
-	screen.fill((colorChangeRed, colorChangeGreen, colorChangeBlue))
+        if event.type == KEYDOWN and event.key == K_ESCAPE:
+                running = False
 
-	if colorChangeBlue < 220 and colorChangeBlue >= 5:
-		colorChangeBlue += colorIncrementBlue
-	elif colorChangeBlue < 5:
-		colorIncrementBlue = 0
-		colorChangeBlue = 5
-	else:
-		colorIncrementBlue = -2
-		colorChangeBlue += colorIncrementBlue
-		colorIncrementGreen = 2
+                
+        if event.type == pygame.QUIT:
+            running = False
 
-	if colorChangeGreen < 200 and colorChangeGreen >= 5:
-		colorChangeGreen += colorIncrementGreen
-	elif colorChangeGreen < 5:
-		colorIncrementGreen = 0
-		colorChangeGreen = 5
-	else:
-		colorIncrementGreen = -2
-		colorChangeGreen += colorIncrementGreen
-		colorIncrementRed = 2
+    pressed_keys = pygame.key.get_pressed()
 
-	if colorChangeRed < 220 and colorChangeRed >= 5:
-		colorChangeRed += colorIncrementRed
-	elif colorChangeRed < 5:
-		colorIncrementRed = 0
-		colorChangeRed = 5
-	else:
-		colorIncrementRed = -2
-		colorChangeRed += colorIncrementRed
-		colorIncrementBlue = 2
+    screen.fill((colorChangeRed, colorChangeGreen, colorChangeBlue))
 
-	t += 1
-	if t <= 35:
-		for x in range (50, 55):
-			pygame.draw.circle(screen, (x, x, x), (SCREEN_WIDTH / 2 - x + 55, SCREEN_HEIGHT / 2), 3 * t, 1)
-		pygame.draw.circle(screen, (colorChangeRed + 30 - t, colorChangeGreen + 30 - t, colorChangeBlue + 30 - t), (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), 3 * t, 5)
+    if colorChangeBlue < 220 and colorChangeBlue >= 5:
+        colorChangeBlue += colorIncrementBlue
+    elif colorChangeBlue < 5:
+        colorIncrementBlue = 0
+        colorChangeBlue = 5
+    else:
+        colorIncrementBlue = -2
+        colorChangeBlue += colorIncrementBlue
+        colorIncrementGreen = 2
 
-	pygame.display.flip()
+    if colorChangeGreen < 200 and colorChangeGreen >= 5:
+        colorChangeGreen += colorIncrementGreen
+    elif colorChangeGreen < 5:
+        colorIncrementGreen = 0
+        colorChangeGreen = 5
+    else:
+        colorIncrementGreen = -2
+        colorChangeGreen += colorIncrementGreen
+        colorIncrementRed = 2
 
-	clock.tick(30)
+    if colorChangeRed < 220 and colorChangeRed >= 5:
+        colorChangeRed += colorIncrementRed
+    elif colorChangeRed < 5:
+        colorIncrementRed = 0
+        colorChangeRed = 5
+    else:
+        colorIncrementRed = -2
+        colorChangeRed += colorIncrementRed
+        colorIncrementBlue = 2
+
+    player.update(pressed_keys)
+    ball.update()
+
+    for entity in entities:
+        screen.blit(entity.surf, entity.rect)
+
+    pygame.display.flip()
+
+    clock.tick(60)
 
 pygame.quit()
