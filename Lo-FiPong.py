@@ -18,6 +18,7 @@ colorChangeGreen = 5
 colorIncrementGreen = 0
 colorChangeRed = 5
 colorIncrementRed = 0
+t = 0
 
 #FIXME: add a player and enemy class
 
@@ -67,6 +68,12 @@ while running:
 		colorIncrementRed = -2
 		colorChangeRed += colorIncrementRed
 		colorIncrementBlue = 2
+
+	t += 1
+	if t <= 35:
+		for x in range (50, 55):
+			pygame.draw.circle(screen, (x, x, x), (SCREEN_WIDTH / 2 - x + 55, SCREEN_HEIGHT / 2), 3 * t, 1)
+		pygame.draw.circle(screen, (colorChangeRed + 30 - t, colorChangeGreen + 30 - t, colorChangeBlue + 30 - t), (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), 3 * t, 5)
 
 	pygame.display.flip()
 
