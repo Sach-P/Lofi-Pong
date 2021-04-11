@@ -15,7 +15,7 @@ from pygame.locals import(
     QUIT,
 )
 
-f = open('time.txt', 'r')
+f = open('timeBtwnBeats.txt', 'r')
 FRAME_RATE = 60
 
 class Table(pygame.sprite.Sprite):
@@ -56,7 +56,10 @@ class Opponent(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(center=(self.Mx, self.y))
 
     def update(self):
-        if ball.centerY < (SCREEN_HEIGHT / 2) and ball.toY == ball.tY:
+        if ball.endOfFile and ball.centerY < (SCREEN_HEIGHT / 2)  and ball.toY == ball.tY:
+            self.rect = self.surf.get_rect(center=(ball.toX - 75, 85))
+
+        elif ball.centerY < (SCREEN_HEIGHT / 2) and ball.toY == ball.tY:
             self.rect = self.surf.get_rect(center=(ball.toX, 85))
 
 class Ball(pygame.sprite.Sprite):
@@ -81,10 +84,13 @@ class Ball(pygame.sprite.Sprite):
         self.r = random.randint(1, 3)
 
         self.mult = 0
+        self.endOfFile = False
       
     def update(self):
 
         self.centerX, self.centerY = self.rect.center
+
+        self.simulate()
 
         if self.r == 1:
             self.toX = self.Lx
@@ -92,26 +98,38 @@ class Ball(pygame.sprite.Sprite):
             self.toX = self.Mx
         elif self.r == 3:
             self.toX = self.Rx
+        
+        if (self.toX - self.centerX != 0):
+            self.dx = (self.toX - self.centerX) / abs(self.toY - self.centerY)
 
-        if self.centerY <= self.tY:
+        self.rect.move_ip(self.dx * self.mult, self.dy * self.mult)  
+
+    def simulate(self):
+
+        opponent.update()
+            
+        if self.centerY <= self.tY and pygame.sprite.collide_rect(self, opponent):
             self.r = random.randint(1, 3)
             self.toY = self.bY
-            self.mult = abs(self.toY - self.centerY) / (FRAME_RATE * float(f.readline()))
+            next_line = f.readline()
+            if next_line:
+                self.mult = abs(self.toY - self.centerY) / (FRAME_RATE * float(next_line))
+            else:
+                self.endOfFile = True
             if (self.toY - self.centerY != 0):
                 self.dy = 1
         
         elif self.centerY >= self.bY and pygame.sprite.collide_rect(self, player):
             self.r = random.randint(1, 3)
             self.toY = self.tY
-            self.mult = abs(self.toY - self.centerY) / (FRAME_RATE * float(f.readline()))
+            next_line = f.readline()
+            if next_line:
+                self.mult = abs(self.toY - self.centerY) / (FRAME_RATE * float(next_line))
+            else:
+                self.endOfFile = True
             if (self.toY - self.centerY != 0):
                 self.dy = -1
 
-        
-        if (self.toX - self.centerX != 0):
-            self.dx = (self.toX - self.centerX) / abs(self.toY - self.centerY)
-
-        self.rect.move_ip(self.dx * self.mult, self.dy * self.mult)   
 
 pygame.init()
 
@@ -155,7 +173,14 @@ while running:
 
     player.update(pressed_keys)
     ball.update()
-    opponent.update()
+
+    if ball.endOfFile == True and ball.centerY < 0:
+        print("You Win!")
+        running = False
+
+    elif ball.centerY > SCREEN_HEIGHT:
+        print("You Lose :(")
+        running = False
 
     for entity in entities:
         screen.blit(entity.surf, entity.rect)
