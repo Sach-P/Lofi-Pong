@@ -77,7 +77,7 @@ class Ball(pygame.sprite.Sprite):
 
         if centerY >= self.bY:
             self.toY = self.tY
-            if (self.toX - centerX != 0):
+         if (self.toX - centerX != 0):
                 self.dx = (self.toX - centerX)/math.sqrt(self.toX**2 + centerX**2)
             if (self.toY - centerY != 0):
                 self.dy = -1
