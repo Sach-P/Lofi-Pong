@@ -26,6 +26,13 @@ class Table(pygame.sprite.Sprite):
         self.surf.fill((100, 150, 150))
         self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
 
+class Net(pygame.sprite.Sprite):
+    def __init__(self):
+        super(Net, self).__init__()
+        self.surf = pygame.image.load("Net.png").convert()
+        self.surf.set_colorkey((0, 0, 0), RLEACCEL)
+        self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
@@ -157,6 +164,8 @@ ball = Ball()
 entities.add(ball)
 opponent = Opponent()
 entities.add(opponent)
+net = Net()
+entities.add(net)
 
 clock = pygame.time.Clock()
 
