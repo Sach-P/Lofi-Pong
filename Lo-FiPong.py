@@ -3,6 +3,7 @@ import random
 import math
 
 from pygame.locals import(
+    RLEACCEL,
     K_a,
     K_s,
     K_d,
@@ -65,8 +66,8 @@ class Opponent(pygame.sprite.Sprite):
 class Ball(pygame.sprite.Sprite):
     def __init__(self):
         super(Ball, self).__init__()
-        self.surf = pygame.Surface((20, 20))
-        self.surf.fill((255, 255, 255))
+        self.surf = pygame.image.load("ball.png").convert()
+        self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, 100))
 
         self.bY = SCREEN_HEIGHT - 100
@@ -144,6 +145,7 @@ colorChangeRed = 5
 colorIncrementRed = 0
 t = 0
 
+screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
 entities = pygame.sprite.Group()
 
@@ -155,8 +157,6 @@ ball = Ball()
 entities.add(ball)
 opponent = Opponent()
 entities.add(opponent)
-
-screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
 clock = pygame.time.Clock()
 
