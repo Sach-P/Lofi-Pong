@@ -15,8 +15,13 @@ from pygame.locals import(
     QUIT,
 )
 
+# this file indicates the times between the beats of the song
 f = open('timeBtwnBeats.txt', 'r')
+
 FRAME_RATE = 60
+
+# this is a daley for the first move from the first line of the txt file so the game doesn't start right away.
+start_delay = FRAME_RATE * float(f.readline())
 
 class Table(pygame.sprite.Sprite):
     def __init__(self):
@@ -25,6 +30,7 @@ class Table(pygame.sprite.Sprite):
         self.surf.fill((100, 150, 150))
         self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
 
+# the player (the bottom paddle) uses a combination of 3 keys to move to three different locations.
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
@@ -44,6 +50,7 @@ class Player(pygame.sprite.Sprite):
         if pressed_keys[K_d] or pressed_keys[K_RIGHT]:
             self.rect = self.surf.get_rect(center=(self.Rx, self.y))
 
+# The opponent just moves to the balls x position until the last line of the file, where it just misses the ball so the player wins.
 class Opponent(pygame.sprite.Sprite):
     def __init__(self):
         super(Opponent, self).__init__()
@@ -62,6 +69,8 @@ class Opponent(pygame.sprite.Sprite):
         elif ball.centerY < (SCREEN_HEIGHT / 2) and ball.toY == ball.tY:
             self.rect = self.surf.get_rect(center=(ball.toX, 85))
 
+# when the ball is hit by the player or opponent, it choses a random preset x position to move to and moves to the opposite side of the table
+# in a given time read from the text file.
 class Ball(pygame.sprite.Sprite):
     def __init__(self):
         super(Ball, self).__init__()
@@ -85,6 +94,8 @@ class Ball(pygame.sprite.Sprite):
 
         self.mult = 0
         self.endOfFile = False
+
+        self.centerX, self.centerY = self.rect.center
       
     def update(self):
 
@@ -130,12 +141,10 @@ class Ball(pygame.sprite.Sprite):
             if (self.toY - self.centerY != 0):
                 self.dy = -1
 
-
 pygame.init()
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 800
-
 
 entities = pygame.sprite.Group()
 
@@ -147,8 +156,6 @@ ball = Ball()
 entities.add(ball)
 opponent = Opponent()
 entities.add(opponent)
-
-
 
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
@@ -172,14 +179,23 @@ while running:
     pressed_keys = pygame.key.get_pressed()
 
     player.update(pressed_keys)
-    ball.update()
 
+    # ball only starts moving when the start delay is zero.
+    if start_delay == 0:
+        ball.update()
+    else:
+        start_delay -= 1
+
+    # If the txt file has no more lines left, the song is over and the player wins.
     if ball.endOfFile == True and ball.centerY < 0:
         print("You Win!")
+        # TODO make this pop up a you win screen instead of closing the program.
         running = False
 
+    # if the player misses the ball, the player loses
     elif ball.centerY > SCREEN_HEIGHT:
         print("You Lose :(")
+        # TODO make this pop up a gameover screen instead of closing the program.
         running = False
 
     for entity in entities:
