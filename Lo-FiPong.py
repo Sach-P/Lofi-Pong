@@ -57,10 +57,16 @@ class Player(pygame.sprite.Sprite):
     def update(self, pressed_keys):
         if pressed_keys[K_a] or pressed_keys[K_LEFT]:
             self.rect = self.surf.get_rect(center=(self.Lx, self.y))
+            self.surf = pygame.image.load("BluePaddleLeft.png").convert()
+            self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         if pressed_keys[K_s] or pressed_keys[K_DOWN] or pressed_keys[K_UP]:
             self.rect = self.surf.get_rect(center=(self.Mx, self.y))
+            self.surf = pygame.image.load("BluePaddleMid.png").convert()
+            self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         if pressed_keys[K_d] or pressed_keys[K_RIGHT]:
             self.rect = self.surf.get_rect(center=(self.Rx, self.y))
+            self.surf = pygame.image.load("BluePaddleRight.png").convert()
+            self.surf.set_colorkey((0, 0, 0), RLEACCEL)
 
 class Opponent(pygame.sprite.Sprite):
     def __init__(self):
