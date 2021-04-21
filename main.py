@@ -187,7 +187,7 @@ while running:
         start_delay -= 1
 
     # If the txt file has no more lines left, the song is over and the player wins.
-    if ball.endOfFile == True and ball.centerY < 0:
+    if ball.centerY < 0:
         print("You Win!")
         # TODO make this pop up a you win screen instead of closing the program.
         running = False
