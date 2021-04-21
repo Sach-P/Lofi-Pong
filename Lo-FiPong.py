@@ -210,7 +210,7 @@ while running:
 
     screen.fill((colorChangeRed, colorChangeGreen, colorChangeBlue))
 
-    if colorChangeBlue < 220 and colorChangeBlue >= 5:
+    if colorChangeBlue < 200 and colorChangeBlue >= 5:
         colorChangeBlue += colorIncrementBlue
     elif colorChangeBlue < 5:
         colorIncrementBlue = 0
@@ -230,7 +230,7 @@ while running:
         colorChangeGreen += colorIncrementGreen
         colorIncrementRed = 2
 
-    if colorChangeRed < 220 and colorChangeRed >= 5:
+    if colorChangeRed < 200 and colorChangeRed >= 5:
         colorChangeRed += colorIncrementRed
     elif colorChangeRed < 5:
         colorIncrementRed = 0
