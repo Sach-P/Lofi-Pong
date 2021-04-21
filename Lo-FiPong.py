@@ -20,6 +20,8 @@ from pygame.locals import(
 f = open('timeBtwnBeats.txt', 'r')
 FRAME_RATE = 60
 
+start_delay = FRAME_RATE * float(f.readline())
+
 class StartScreen(pygame.sprite.Sprite):
     def __init__(self):
         super(StartScreen, self).__init__()
@@ -101,6 +103,8 @@ class Ball(pygame.sprite.Sprite):
 
         self.mult = 0
         self.endOfFile = False
+
+        self.centerX, self.centerY = self.rect.center
       
     def update(self):
 
@@ -243,9 +247,12 @@ while running:
     pressed_keys = pygame.key.get_pressed()
 
     player.update(pressed_keys)
-    ball.update()
+    if start_delay == 0:
+        ball.update()
+    else:
+        start_delay -= 1
 
-    if ball.endOfFile == True and ball.centerY < 0:
+    if ball.centerY < 0:
         print("You Win!")
         running = False
 
