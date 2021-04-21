@@ -12,12 +12,20 @@ from pygame.locals import(
     K_DOWN,
     K_UP,
     K_ESCAPE,
+    K_SPACE,
     KEYDOWN,
     QUIT,
 )
 
 f = open('timeBtwnBeats.txt', 'r')
 FRAME_RATE = 60
+
+class StartScreen(pygame.sprite.Sprite):
+    def __init__(self):
+        super(StartScreen, self).__init__()
+        self.surf = pygame.image.load("StartScreen.png").convert()
+        self.surf.set_colorkey((0, 0, 0), RLEACCEL)
+        self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 2 - 100))
 
 class Table(pygame.sprite.Sprite):
     def __init__(self):
@@ -152,7 +160,7 @@ colorChangeRed = 5
 colorIncrementRed = 0
 t = 0
 
-screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+screenStart = pygame.display.set_mode([SCREEN_HEIGHT, SCREEN_WIDTH])
 
 entities = pygame.sprite.Group()
 
@@ -169,7 +177,27 @@ entities.add(net)
 
 clock = pygame.time.Clock()
 
+startScreen = StartScreen()
+
+start = True
 running = True
+while start:
+    for event in pygame.event.get():
+
+        if event.type == KEYDOWN and event.key == K_ESCAPE:
+                start = False
+                running = False
+
+        if event.type == KEYDOWN and event.key == K_SPACE:
+                start = False
+
+        if event.type == pygame.QUIT:
+            start = False  
+            running = False  
+    screenStart.blit(startScreen.surf, startScreen.rect)
+    pygame.display.flip()
+
+screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 while running:
     for event in pygame.event.get():
 
