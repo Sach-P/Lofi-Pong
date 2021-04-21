@@ -46,8 +46,8 @@ class Net(pygame.sprite.Sprite):
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
-        self.surf = pygame.Surface((75, 35))
-        self.surf.fill((255, 230, 255))
+        self.surf = pygame.image.load("BluePaddleMid.png").convert()
+        self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         self.Lx = SCREEN_WIDTH / 2 - 150
         self.Mx = SCREEN_WIDTH / 2
         self.Rx = SCREEN_WIDTH / 2 + 150
