@@ -71,8 +71,8 @@ class Player(pygame.sprite.Sprite):
 class Opponent(pygame.sprite.Sprite):
     def __init__(self):
         super(Opponent, self).__init__()
-        self.surf = pygame.Surface((75, 35))
-        self.surf.fill((255, 230, 255))
+        self.surf = pygame.image.load("RedPaddleMid.png").convert()
+        self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         self.Lx = SCREEN_WIDTH / 2 - 150
         self.Mx = SCREEN_WIDTH / 2
         self.Rx = SCREEN_WIDTH / 2 + 150
@@ -82,9 +82,27 @@ class Opponent(pygame.sprite.Sprite):
     def update(self):
         if ball.endOfFile and ball.centerY < (SCREEN_HEIGHT / 2)  and ball.toY == ball.tY:
             self.rect = self.surf.get_rect(center=(ball.toX - 75, 85))
+            if ball.toX == ball.Mx:
+                self.surf = pygame.image.load("RedPaddleMid.png").convert()
+                self.surf.set_colorkey((0, 0, 0), RLEACCEL)
+            if ball.toX == ball.Lx:
+                self.surf = pygame.image.load("RedPaddleLeft.png").convert()
+                self.surf.set_colorkey((0, 0, 0), RLEACCEL)
+            if ball.toX == ball.Rx:
+                self.surf = pygame.image.load("RedPaddleRight.png").convert()
+                self.surf.set_colorkey((0, 0, 0), RLEACCEL)
 
         elif ball.centerY < (SCREEN_HEIGHT / 2) and ball.toY == ball.tY:
             self.rect = self.surf.get_rect(center=(ball.toX, 85))
+            if ball.toX == ball.Mx:
+                self.surf = pygame.image.load("RedPaddleMid.png").convert()
+                self.surf.set_colorkey((0, 0, 0), RLEACCEL)
+            if ball.toX == ball.Lx:
+                self.surf = pygame.image.load("RedPaddleLeft.png").convert()
+                self.surf.set_colorkey((0, 0, 0), RLEACCEL)
+            if ball.toX == ball.Rx:
+                self.surf = pygame.image.load("RedPaddleRight.png").convert()
+                self.surf.set_colorkey((0, 0, 0), RLEACCEL)
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self):
@@ -178,10 +196,10 @@ table = Table()
 entities.add(table)
 player = Player()
 entities.add(player)
-ball = Ball()
-entities.add(ball)
 opponent = Opponent()
 entities.add(opponent)
+ball = Ball()
+entities.add(ball)
 net = Net()
 entities.add(net)
 
