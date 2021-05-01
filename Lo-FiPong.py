@@ -29,6 +29,20 @@ class StartScreen(pygame.sprite.Sprite):
         self.surf.set_colorkey((0, 0, 0), RLEACCEL)
         self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2 + 100, SCREEN_HEIGHT / 2 - 100))
 
+class WinScreen(pygame.sprite.Sprite):
+    def __init__(self):
+        super(WinScreen, self).__init__()
+        self.surf = pygame.image.load("Win Screen.png").convert()
+        self.surf.set_colorkey((0, 0, 0), RLEACCEL)
+        self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+
+class LoseScreen(pygame.sprite.Sprite):
+    def __init__(self):
+        super(LoseScreen, self).__init__()
+        self.surf = pygame.image.load("Lose Screen.png").convert()
+        self.surf.set_colorkey((0, 0, 0), RLEACCEL)
+        self.rect = self.surf.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+
 class Table(pygame.sprite.Sprite):
     def __init__(self):
         super(Table, self).__init__()
@@ -206,6 +220,8 @@ entities.add(net)
 clock = pygame.time.Clock()
 
 startScreen = StartScreen()
+loseScreen = LoseScreen()
+winScreen = WinScreen()
 
 start = True
 running = True
@@ -277,17 +293,22 @@ while running:
         start_delay -= 1
 
     if ball.centerY < 0:
+        screen.blit(winScreen.surf, winScreen.rect)
+        pygame.display.flip()
+        pygame.time.delay(2000)
         print("You Win!")
         running = False
 
     elif ball.centerY > SCREEN_HEIGHT:
+        screen.blit(loseScreen.surf, loseScreen.rect)
+        pygame.display.flip()
+        pygame.time.delay(2000)
         print("You Lose :(")
         running = False
-
-    for entity in entities:
-        screen.blit(entity.surf, entity.rect)
-
-    pygame.display.flip()
+    else:
+        for entity in entities:
+            screen.blit(entity.surf, entity.rect)
+        pygame.display.flip()
 
     clock.tick(FRAME_RATE)
 
